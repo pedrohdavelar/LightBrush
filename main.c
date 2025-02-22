@@ -563,6 +563,53 @@ npLED_t (*trailColors[])[5][5] = {
     &figTrailWhite, &figTrailRed, &figTrailYellow, &figTrailGreen, &figTrailCyan, &figTrailBlue, &figTrailMagenta 
 };
 
+//Figuras para as letras do meu nome
+npLED_t figP[5][5] = {
+    {npBLUE, npBLUE, npBLUE, npBLUE, npBLACK},
+    {npBLUE, npBLACK, npBLACK, npBLACK, npBLUE},
+    {npBLUE, npBLUE, npBLUE, npBLUE, npBLACK},
+    {npBLUE, npBLACK, npBLACK, npBLACK, npBLACK},
+    {npBLUE, npBLACK, npBLACK, npBLACK, npBLACK}
+};
+
+npLED_t figE[5][5] = {
+    {npGREEN, npGREEN, npGREEN, npGREEN, npGREEN},
+    {npGREEN, npBLACK, npBLACK, npBLACK, npBLACK},
+    {npGREEN, npGREEN, npGREEN, npBLACK, npBLACK},
+    {npGREEN, npBLACK, npBLACK, npBLACK, npBLACK},
+    {npGREEN, npGREEN, npGREEN, npGREEN, npGREEN}
+};
+
+npLED_t figD[5][5] = {
+    {npRED, npRED, npRED, npRED, npBLACK},
+    {npRED, npBLACK, npBLACK, npBLACK, npRED},
+    {npRED, npBLACK, npBLACK, npBLACK, npRED},
+    {npRED, npBLACK, npBLACK, npBLACK, npRED},
+    {npRED, npRED, npRED, npRED, npBLACK}
+};
+
+npLED_t figR[5][5] = {
+    {npYELLOW, npYELLOW, npYELLOW, npYELLOW, npBLACK},
+    {npYELLOW, npBLACK, npBLACK, npBLACK, npYELLOW},
+    {npYELLOW, npYELLOW, npYELLOW, npYELLOW, npBLACK},
+    {npYELLOW, npBLACK, npBLACK, npBLACK, npYELLOW},
+    {npYELLOW, npBLACK, npBLACK, npBLACK, npYELLOW}
+};
+
+npLED_t figO[5][5] = {
+    {npBLACK, npMAGENTA, npMAGENTA, npMAGENTA, npBLACK},
+    {npMAGENTA, npBLACK, npBLACK, npBLACK, npMAGENTA},
+    {npMAGENTA, npBLACK, npBLACK, npBLACK, npMAGENTA},
+    {npMAGENTA, npBLACK, npBLACK, npBLACK, npMAGENTA},
+    {npBLACK, npMAGENTA, npMAGENTA, npMAGENTA, npBLACK}
+};
+
+#define letterCOUNT 5
+//Array com as letras do meu nome =)
+npLED_t (*arrayPedro[])[5][5] = {
+    &figP, &figE, &figD, &figR, &figO 
+};
+
 #pragma endregion //Fim definição figuras
 
 #pragma endregion //######################Fim Código Neopixel#####################################
@@ -861,18 +908,20 @@ void shutdownBeep(){
 #pragma region //##### Inicio - Código para os efeitos
 
 //quantidade de efeitos 
-#define effectCOUNT 4
-#define effBLINK   0
-#define effTRAIL   1
-#define effFIXED   2
-#define effRAINBOW 3
+#define effectCOUNT 5
+#define effBLINK    0
+#define effTRAIL    1
+#define effFIXED    2
+#define effRAINBOW  3
+#define effPEDRO    4
 
 //lista dos efeitos
 const char* effectNames[effectCOUNT] = {
     "     Piscar     ",
     "     Rastro     ",
     "    Cor Fixa    ",
-    "  Cor oscilante "
+    "  Cor oscilante ",
+    "      Pedro     "
 };
 
 //tempo que a matriz led ficara ativa na função piscar
@@ -953,9 +1002,11 @@ int main() {
     int secSelection = 3;
     char charSecSelection[1];
     int effectSelection = 0;
+    int pedroCount = 0;
 
     uint8_t brightness = 0;
     char charBrightness[3];
+    absolute_time_t delayCheck = get_absolute_time();
 
     while (true) {
         //leitura do joystick para alteração de parametros
@@ -972,12 +1023,16 @@ int main() {
             if (joystick.direction == joyRIGHT) {++colorSelection;beep();}
         }
 
-        if (effectSelection == effRAINBOW){++colorSelection;}
-
         //se figSelection for maior que o número de figuras, volta para a primeira;
         //se for menor que zero, volta para a última
         if (figSelection > (figCOUNT - 1)) {figSelection = 0;}
         if (figSelection < 0){figSelection = (figCOUNT - 1);}
+        
+        //delay de 300ms para atualizar as cores no caso da função cor oscilante
+        if (absolute_time_diff_us(delayCheck, get_absolute_time()) > 300000 && effectSelection == effRAINBOW ){
+            delayCheck = get_absolute_time();
+            ++colorSelection;
+        }
         
         //se colorSelection for maior que o número de cores, volta para a primeira;
         //se for menor que zero, volta para a última
@@ -1009,14 +1064,24 @@ int main() {
             ssd1306_draw_string(ssd, 0,15, colorNames[colorSelection]);
             }
         }
+        
+        if (effectSelection == effPEDRO){
+            ssd1306_draw_string(ssd, 0,7,  "  Imprimir Nome ");
+        }
+        
+        if (effectSelection != effPEDRO){
         ssd1306_draw_string(ssd, 0,23, "^Selecao  Tempo#");
+        }
+        
         ssd1306_draw_string(ssd, 0,56,"A RUN   B Efeito");
 
         //imprime no display oled o tempo selecionado
-        sprintf(charSecSelection, "%d", secSelection);
-        ssd1306_draw_string(ssd, 24, 31, "Tempo ");
-        ssd1306_draw_string(ssd, 72, 31, charSecSelection);
-        ssd1306_draw_string(ssd, 90, 31, "sec");
+        if (effectSelection != effPEDRO){ 
+            sprintf(charSecSelection, "%d", secSelection);
+            ssd1306_draw_string(ssd, 24, 31, "Tempo ");
+            ssd1306_draw_string(ssd, 72, 31, charSecSelection);
+            ssd1306_draw_string(ssd, 90, 31, "sec");
+        };
 
         //imprime no display oled o efeito selecionado
         ssd1306_draw_string(ssd, 0, 39, effectNames[effectSelection]);
@@ -1028,10 +1093,21 @@ int main() {
         if (effectSelection == effBLINK || effectSelection == effTRAIL){
             npSetFigure(figArray[figSelection]);
         }
+        
         if (effectSelection == effFIXED || effectSelection == effRAINBOW){
             npSetFigure(figColors[colorSelection]);
         }        
         
+        if (effectSelection == effPEDRO){
+            npSetFigure(arrayPedro[pedroCount]);
+            //delay de 300ms para atualizar as letras na matriz de led
+            if (absolute_time_diff_us(delayCheck, get_absolute_time()) > 300000){
+                delayCheck = get_absolute_time();
+                ++pedroCount;
+            }
+            if (pedroCount > (letterCOUNT - 1)) {pedroCount = 0;}
+        }
+
         //no momento da configuração, deixar o brilho baixo para não cegar o usuário!
         npSetBrightness(npMIN);
         npWrite();
@@ -1123,15 +1199,27 @@ int main() {
                 }
             }
                     
-        //intervalo de 2 segundos com tudo apagado para dar tempo de finalizar a foto
-        npClear();
-        npWrite();
-        memset(ssd, 0, ssd1306_buffer_length);
-        render_on_display(ssd, &frame_area);
-        sleep_ms(2000);
+            //efeito do meu nome =)
+            if (effectSelection == effPEDRO){
+                for (int i = 0; i < letterCOUNT; ++i){
+                    npSetFigure(arrayPedro[i]);
+                    npWrite();
+                    sleep_ms(BLINK_TIME);
+                    npClear();
+                    npWrite();
+                    sleep_ms(BLINK_INTERVAL);
+                }
+            }
             
-        //garantir a limpeza do estado do botão A para evitar reacionamento em falso
-        buttonA.isPressed = false;
+            //intervalo de 2 segundos com tudo apagado para dar tempo de finalizar a foto
+            npClear();
+            npWrite();
+            memset(ssd, 0, ssd1306_buffer_length);
+            render_on_display(ssd, &frame_area);
+            sleep_ms(2000);
+
+            //garantir a limpeza do estado do botão A para evitar reacionamento em falso
+            buttonA.isPressed = false;
         }
 
         //reset para bootsel se j e b forem pressionados
