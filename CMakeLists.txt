@@ -56,6 +56,7 @@ target_link_libraries(lightBrush
         hardware_dma
         hardware_clocks
         hardware_adc
+        hardware_pwm
         )
 
 # create map/bin/hex file etc.
