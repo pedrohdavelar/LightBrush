@@ -1118,7 +1118,6 @@ int main() {
             sleep_ms(500);   
             //tempo de inicio dos efeitos
             absolute_time_t startTime = get_absolute_time();
-            uint8_t secCount = 0;
 
             //efeito de piscar
             if (effectSelection == effBLINK){
