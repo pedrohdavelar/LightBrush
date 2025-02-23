@@ -21,18 +21,13 @@ Projeto Final Embarcatech
 #include "inc/ssd1306.h"
 #include "ws2818b.pio.h"
 
+//essa variável será responsável por ativar os prints no terminal
+bool debugMode = 0; 
+
 #pragma region //##### Inicio - Código Display OLED 1306
 //Adaptado de: https://github.com/BitDogLab/BitDogLab-C/tree/main/display_oled
 #define I2C_SDA_PIN 14
 #define I2C_SCL_PIN 15
-
-
-//essa variável será responsável por ativar os prints no terminal
-bool debugMode = 0; 
-
-//variaveis para guardar a posição atual do cursor
-int currentLine = 0;       
-int currentColumn = 0;
 
 uint8_t ssd[ssd1306_buffer_length];
 
@@ -43,23 +38,11 @@ struct render_area frame_area = {
     end_page : ssd1306_n_pages - 1
 };
 
-//Função para verificar e resetar, se for o caso, a posição do cursor
-void checkCursorPosition(){
-    if (currentLine >= 64){
-        currentLine = 0;
-        memset(ssd, 0, ssd1306_buffer_length);
-    }
-    if (currentColumn >= 128){
-        currentColumn = 0;
-        memset(ssd, 0, ssd1306_buffer_length);
-    }
-}
+
 //
 #pragma endregion //###########################Fim - Código Display OLED 1306####################
 
 #pragma region //##### Inicio - Código Neopixel
-//######################Matriz 5x5 de LEDs RGB#################################
-//Código para uso da matriz de LEDs 5x5
 //Adaptado de: https://github.com/BitDogLab/BitDogLab-C/tree/main/neopixel_pio
 
 //Defines para a matriz 5x5 de LEDs
@@ -104,8 +87,6 @@ void npInit(uint pin){
 }
 
 //Funções de operação da matriz de LEDs
-//https://discord.com/channels/1306286396063088640/1307105239236739134/1339395917286998121
-
 
 //Atribui uma cor RGB a um LED
 void npSetLED(const uint index, uint8_t r, uint8_t g, uint8_t b){
@@ -163,7 +144,6 @@ uint8_t npReverseByte(uint8_t value){
     return reverseByte[value];
 }
 
-
 //Escreve os dados do buffer nos LEDs
 void npWrite(){
     //Escreve cada dado de 8 bits dos pixels em sequencia no buffer da máquina PIO
@@ -197,6 +177,7 @@ void npSetFigure(npLED_t figure[5][5]){
     }
 }
 
+//definições para facilitar o ajuste de brilho
 #define npMIN  1
 #define npLOW  16
 #define npMED  32
@@ -211,8 +192,6 @@ void npSetBrightness(uint8_t brightness){
         if(leds[i].B > 0) {leds[i].B =  brightness;}
     }
 }
-
-
 
 #pragma region //Figuras para a matriz de LEDs
 
@@ -283,12 +262,11 @@ npLED_t figBrazilFlag [5][5] = {
     {npGREEN,npGREEN,npGREEN,npGREEN,npGREEN}
 };
 
-//deixar aqui o # de figuras usadas para o pincel de luz -1. Por hora, 5-1 =4:
-//figHeart, figSmiley, figStar, figRainbow, figBrazilFlag
+//deixar aqui o # de figuras usadas para o pincel de luz. Isso facilita se for necessário incluir novas figuras 
 #define figCOUNT 5
 
-//com o define acima e o array abaixo, será possível iterar facilmente entre as figuras
-npLED_t (*figArray[])[5][5] = {
+//com o define acima e o array abaixo, será possível iterar entre as figuras usando esse array com endereço das figuras
+npLED_t (*figArray[figCOUNT])[5][5] = {
     &figHeart, &figSmiley, &figStar, &figRainbow, &figBrazilFlag
 };
 
@@ -301,6 +279,9 @@ const char* figNames[figCOUNT] = {
     "     Arco-Iris  ", 
     "     Brasil     "
 };
+
+//essas figuras de dos botões foram inicialmente usadas para teste. No futuro, seria interessante
+//montar todo o alfabeto para poder pintar com strings dinâmicas
 
 //figura A
 npLED_t figA[5][5] = {
@@ -328,6 +309,8 @@ npLED_t figJ[5][5] = {
     {npWHITE, npBLACK, npWHITE, npBLACK, npBLACK},
     {npBLACK, npWHITE, npBLACK, npBLACK, npBLACK}
 };     
+
+//Figuras de cores
 
 //Quadrado Branco
 npLED_t figWhite[5][5] = {
@@ -392,10 +375,11 @@ npLED_t figMagenta[5][5] = {
     {npMAGENTA, npMAGENTA, npMAGENTA, npMAGENTA, npMAGENTA}
 };
 
-//quantidade de cores disponiveis - por hora 8
+//quantidade de cores disponiveis
 #define colorCOUNT 7
+
 //Array com as cores para facilitar a oscilação entre elas
-npLED_t (*figColors[])[5][5] = {
+npLED_t (*figColors[colorCOUNT])[5][5] = {
     &figWhite, &figRed, &figYellow, &figGreen, &figCyan, &figBlue, &figMagenta 
 };
 //Array com o nome das cores
@@ -408,6 +392,8 @@ const char *colorNames[colorCOUNT] = {
     "     Azul       ", 
     "     Magenta    "
 };
+
+//Essas figuras foram usadas para testar o joystick. Convém mantelas pois podem voltar a ser uteis no futuro
 
 //Circulo (posição central do joystick)
 npLED_t figCircle [5][5] = {
@@ -454,9 +440,13 @@ npLED_t figArrowRight [5][5] = {
 };
 
 //Array com as setas para facilitar a oscilação entre elas
-npLED_t (*figArrows[])[5][5] = {
+npLED_t (*figArrows[5])[5][5] = {
     &figCircle, &figArrowUp, &figArrowDown, &figArrowLeft, &figArrowRight
 };
+
+//Numeros de 0 a 3 para auxiliar com o contador prévio a execução do efeito.
+//Inicialmente o contador mostrava o zero mas mesmo com brilho minimo ele ainda atrapalhava
+//na captura da foto. Mas melhor deixar, no futuro seria interessante incluir os numeros de 4 a 9.
 
 npLED_t figZERO[5][5] = {
     {npBLACK, npWHITE, npWHITE, npWHITE, npBLACK},
@@ -491,12 +481,12 @@ npLED_t figTHREE[5][5] = {
 };
 
 //Array com os numeros
-npLED_t (*figNumbers[])[5][5] = {
+npLED_t (*figNumbers[4])[5][5] = {
     &figZERO, &figONE, &figTWO, &figTHREE
 };
 
 
-//Arrays para o rastro de luz
+//Arrays para o rastro de luz. A ideia do trail não ficou muito legal não mas é mais conveniente manter
 npLED_t figTrailWhite[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
@@ -553,17 +543,15 @@ npLED_t figTrailMagenta[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK}
 };
 
-
-
-
 //quantidade de cores disponiveis - por hora 8
 #define trailCOUNT 7
 //Array com as cores para facilitar a oscilação entre elas
-npLED_t (*trailColors[])[5][5] = {
+npLED_t (*trailColors[trailCOUNT])[5][5] = {
     &figTrailWhite, &figTrailRed, &figTrailYellow, &figTrailGreen, &figTrailCyan, &figTrailBlue, &figTrailMagenta 
 };
 
 //Figuras para as letras do meu nome
+
 npLED_t figP[5][5] = {
     {npBLUE, npBLUE, npBLUE, npBLUE, npBLACK},
     {npBLUE, npBLACK, npBLACK, npBLACK, npBLUE},
@@ -589,11 +577,11 @@ npLED_t figD[5][5] = {
 };
 
 npLED_t figR[5][5] = {
-    {npYELLOW, npYELLOW, npYELLOW, npYELLOW, npBLACK},
-    {npYELLOW, npBLACK, npBLACK, npBLACK, npYELLOW},
-    {npYELLOW, npYELLOW, npYELLOW, npYELLOW, npBLACK},
-    {npYELLOW, npBLACK, npBLACK, npBLACK, npYELLOW},
-    {npYELLOW, npBLACK, npBLACK, npBLACK, npYELLOW}
+    {npCYAN, npCYAN, npCYAN, npCYAN, npBLACK},
+    {npCYAN, npBLACK, npBLACK, npBLACK, npCYAN},
+    {npCYAN, npCYAN, npCYAN, npCYAN, npBLACK},
+    {npCYAN, npBLACK, npBLACK, npBLACK, npCYAN},
+    {npCYAN, npBLACK, npBLACK, npBLACK, npCYAN}
 };
 
 npLED_t figO[5][5] = {
@@ -606,7 +594,7 @@ npLED_t figO[5][5] = {
 
 #define letterCOUNT 5
 //Array com as letras do meu nome =)
-npLED_t (*arrayPedro[])[5][5] = {
+npLED_t (*arrayPedro[letterCOUNT])[5][5] = {
     &figP, &figE, &figD, &figR, &figO 
 };
 
@@ -615,16 +603,19 @@ npLED_t (*arrayPedro[])[5][5] = {
 #pragma endregion //######################Fim Código Neopixel#####################################
 
 #pragma region //##### Inicio - Código para os botões 
+
 //Feito por mim, com base no material do Embarcatech 
 //usado originalmente no projeto Wokwi: https://wokwi.com/projects/421772261889153025
 //leitura dos botões via interrupt com debouncing via temporizador de hardware
+
 //Pinos dos botões
 #define A_BUTTON_PIN 5    //Botao A
 #define B_BUTTON_PIN 6    //Botao B
 #define J_BUTTON_PIN 22   //Botao do Joystick
 
-//tempo constante para o sistema fazer o debouncing - calibrar depois
+//tempo constante para o sistema fazer o debouncing
 #define DEBOUNCE_TIME_MS 50
+
 //Struct para definir as variáveis de uso de um botão
 typedef struct{ 
 uint8_t gpioPin;             //Número do pino do botão
@@ -641,27 +632,12 @@ void button_status(uint8_t pin){
     buttonState *button;
     if (pin == A_BUTTON_PIN){
         if (debugMode){printf("Status do botão A\n");}
-        checkCursorPosition();
-        //ssd1306_draw_string(ssd, currentColumn, currentLine, "A! ");
-        //render_on_display(ssd, &frame_area);
-        currentLine += 8;
-        currentColumn += 24;
         button = &buttonA;
     } else if (pin == B_BUTTON_PIN){
         if (debugMode){printf("Status do botão B\n");}
-        checkCursorPosition();
-        //ssd1306_draw_string(ssd, currentColumn, currentLine, "B! ");
-        //render_on_display(ssd, &frame_area);
-        currentLine += 8;
-        currentColumn += 24;
         button = &buttonB;
     } else if (pin == J_BUTTON_PIN){
         if (debugMode){printf("Status do botão do Joystick\n");}
-        checkCursorPosition();
-        //ssd1306_draw_string(ssd, currentColumn, currentLine, "J! ");
-        //render_on_display(ssd, &frame_area);
-        currentLine += 8;
-        currentColumn += 24;
         button = &buttonJ;
     } else {
         if (debugMode){printf("Botao invalido!\n");}
@@ -688,10 +664,13 @@ void gpio_callback (uint8_t gpio, uint32_t events){
         if (debugMode){printf("Erro! Botao invalido detectado!\n");}
         return;
     }
+    
     //checagem do tempo para fazer o debounce
     absolute_time_t now = get_absolute_time(); 
+    
     //diferenca de tempo, em microssegundos, entre o ultimo acionamento do botão e o tempo atual
     int64_t elapsedTime  = absolute_time_diff_us(button->lastPressed, now); 
+    
     //multiplica-se a constante DEBOUNCE_TIME_MS por mil para converter para microssegundos
     if (elapsedTime >= DEBOUNCE_TIME_MS *1000){ 
         if (events & GPIO_IRQ_EDGE_FALL){         //borda de caída visto que o botão está em pull_up (baixa quando pressionado, alta quando não pressionado)
@@ -723,6 +702,7 @@ void init_button(buttonState *button, uint8_t pin){
 #pragma endregion //FIM - Código dos botões
 
 #pragma region //##### Inicio - Código para o joystick
+
 //Adaptado de: https://github.com/BitDogLab/BitDogLab-C/tree/main/joystick
 //Combinando também com meu código para os botões
 
@@ -744,15 +724,14 @@ void init_button(buttonState *button, uint8_t pin){
 #define THRESHOLD 75
 #define DEBOUNCE_TIME_MS_JOYSTICK 200
 
-//como os valores de leitura do joystick variam de um valor negativo para positivo,
-//é interessante usar um signed int para guardar os valores
+//é mais conveniente usar nomes ao invés de números para as direções
 #define joyCENTER 0
 #define joyUP 1
 #define joyDOWN 2
 #define joyLEFT 3
 #define joyRIGHT 4
 
-
+//e é também mais conveniente usar um signed int para guardar os valores de -range a +range do que de zero a range
 typedef struct{
     int x;
     int y;
@@ -779,6 +758,7 @@ int mapJoystickValue(uint16_t adcValue){
     return (adcValue * (JOYSTICK_MAX - JOYSTICK_MIN) / 4095) + JOYSTICK_MIN;
 }
 
+//função para ler o joystick
 int readJoystick(){
     //leitura dos valores do joystick
     adc_select_input(1);
@@ -829,9 +809,6 @@ int readJoystick(){
             }
         }
     }
-
-
-
     joystick.directionChanged = false;
     return joyCENTER;
 } 
@@ -865,7 +842,8 @@ void play_tone(uint frequency, uint duration_ms) {
     pwm_set_gpio_level(BUZZER_PIN, 0); // Desliga o som após a duração
 }
 
-//Musiquinha para tocar quando o programa inicia
+//Criei uma musiquinha aleatória para tocar quando o programa inicia
+//Queria fazer algo mais legal mas não deu tempo =/
 void playStartupTune(){
 
     for (int i = 0; i < 3; ++i){
@@ -883,19 +861,20 @@ void playStartupTune(){
 }
 
 
-// Beep para tocar quando detectar o pressionamento de algumna tecla
+//Beep para tocar quando detectar o pressionamento de alguma tecla QUE resulte em alguma alteração de parâmetro
+//Assim servindo de feedback sonoro para o usuário
 void beep() {
     play_tone(2000, 50);
 }
 
-//Beep para tocar na contagem prévia ao inicio do efeito
+//Beep para tocar na contagem prévia ao inicio do efeito - ficou melhor do que eu esperava
 void countDownBeep(){
     for (int i = 11; i > 1; --i){
         play_tone(i*300, 50);
     } 
 }
 
-//beep para tocar ao desligar
+//beep para tocar ao resetar para bootsel
 void shutdownBeep(){
     for (int i = 0; i < 3; ++i){
     play_tone(3500,250);
@@ -1000,12 +979,10 @@ int main() {
     int figSelection = 0;
     int colorSelection = 0;
     int secSelection = 3;
-    char charSecSelection[1];
+    char charSecSelection[2];
     int effectSelection = 0;
     int pedroCount = 0;
 
-    uint8_t brightness = 0;
-    char charBrightness[3];
     absolute_time_t delayCheck = get_absolute_time();
 
     while (true) {
@@ -1145,7 +1122,6 @@ int main() {
             secCountA = get_absolute_time();
             uint8_t secCount = 0;
 
-
             //efeito de piscar
             if (effectSelection == effBLINK){
                 //como absolute_time_diff_us lida com microssegundos, multiplicamos secSelection por 10^6
@@ -1211,18 +1187,19 @@ int main() {
                 }
             }
             
-            //intervalo de 2 segundos com tudo apagado para dar tempo de finalizar a foto
+            //intervalo de 3 segundos com tudo apagado para dar tempo de finalizar a foto
             npClear();
             npWrite();
             memset(ssd, 0, ssd1306_buffer_length);
             render_on_display(ssd, &frame_area);
-            sleep_ms(2000);
+            sleep_ms(3000);
 
             //garantir a limpeza do estado do botão A para evitar reacionamento em falso
             buttonA.isPressed = false;
         }
 
-        //reset para bootsel se j e b forem pressionados
+        //reset para bootsel se j e b forem pressionados. Útil para debugar e não vejo porque remover.
+        //Futuramente se o botão do joystick for utilizado.... 
         if (buttonJ.isPressed && buttonB.isPressed){
             memset(ssd, 0, ssd1306_buffer_length);
             render_on_display(ssd, &frame_area);
