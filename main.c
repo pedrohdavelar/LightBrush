@@ -207,7 +207,7 @@ void npSetBrightness(uint8_t brightness){
 #define npORANGE  { 255, 128, 0 }
 
 //matriz desligada
-npLED_t figOff[5][5] = {
+const npLED_t figOff[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
@@ -217,7 +217,7 @@ npLED_t figOff[5][5] = {
 
 
 //figura de um coração
-npLED_t figHeart[5][5] = {
+const npLED_t figHeart[5][5] = {
     {npBLACK, npRED, npBLACK, npRED, npBLACK},
     {npRED, npBLACK, npRED, npBLACK, npRED},
     {npRED, npBLACK, npBLACK, npBLACK, npRED},
@@ -226,7 +226,7 @@ npLED_t figHeart[5][5] = {
 };
 
 //figura de um smiley
-npLED_t figSmiley [5][5] = {
+const npLED_t figSmiley [5][5] = {
     {npBLACK, npYELLOW, npYELLOW, npYELLOW, npBLACK},
     {npYELLOW, npBLUE, npYELLOW, npBLUE, npYELLOW},
     {npYELLOW, npYELLOW, npYELLOW, npYELLOW, npYELLOW},
@@ -235,7 +235,7 @@ npLED_t figSmiley [5][5] = {
 };
 
 //figura de uma estrela
-npLED_t figStar [5][5] = {
+const npLED_t figStar [5][5] = {
     {npBLACK, npBLACK, npYELLOW, npBLACK, npBLACK},
     {npYELLOW, npYELLOW, npYELLOW, npYELLOW, npYELLOW},
     {npBLACK, npYELLOW, npYELLOW, npYELLOW, npBLACK},
@@ -245,7 +245,7 @@ npLED_t figStar [5][5] = {
 
 //figura de um arco-íris (faltou ajustar o npSetLED pra valores intermediarios pra ter todas as
 //cores mas são só 5x5 leds também então de qualquer forma não caberia tudo =/
-npLED_t figRainbow [5][5] = {
+const npLED_t figRainbow [5][5] = {
     {npRED, npRED, npRED, npRED, npRED},
     {npBLUE, npBLUE, npBLUE, npBLUE, npBLUE},
     {npGREEN, npGREEN, npGREEN, npGREEN, npGREEN},
@@ -254,7 +254,7 @@ npLED_t figRainbow [5][5] = {
 };
 
 //figura da bandeira do brasil (o que deu pra fazer né?)
-npLED_t figBrazilFlag [5][5] = {
+const npLED_t figBrazilFlag [5][5] = {
     {npGREEN,npGREEN,npGREEN,npGREEN,npGREEN},
     {npGREEN,npGREEN,npYELLOW,npGREEN,npGREEN},
     {npGREEN,npYELLOW,npBLUE,npYELLOW,npGREEN},
@@ -266,7 +266,7 @@ npLED_t figBrazilFlag [5][5] = {
 #define figCOUNT 5
 
 //com o define acima e o array abaixo, será possível iterar entre as figuras usando esse array com endereço das figuras
-npLED_t (*figArray[figCOUNT])[5][5] = {
+const npLED_t (*figArray[figCOUNT])[5][5] = {
     &figHeart, &figSmiley, &figStar, &figRainbow, &figBrazilFlag
 };
 
@@ -284,7 +284,7 @@ const char* figNames[figCOUNT] = {
 //montar todo o alfabeto para poder pintar com strings dinâmicas
 
 //figura A
-npLED_t figA[5][5] = {
+const npLED_t figA[5][5] = {
     {npBLACK, npWHITE, npWHITE, npWHITE, npBLACK},
     {npWHITE, npBLACK, npBLACK, npBLACK, npWHITE},
     {npWHITE, npWHITE, npWHITE, npWHITE, npWHITE},
@@ -293,7 +293,7 @@ npLED_t figA[5][5] = {
 };
 
 //figura B
-npLED_t figB[5][5] = {
+const npLED_t figB[5][5] = {
     {npWHITE, npWHITE, npWHITE, npBLACK, npBLACK},
     {npWHITE, npBLACK, npBLACK, npWHITE, npBLACK},
     {npWHITE, npWHITE, npWHITE, npBLACK, npBLACK},
@@ -302,7 +302,7 @@ npLED_t figB[5][5] = {
 };
 
 //figura J
-npLED_t figJ[5][5] = {
+const npLED_t figJ[5][5] = {
     {npWHITE, npWHITE, npWHITE, npWHITE, npWHITE},
     {npBLACK, npBLACK, npWHITE, npBLACK, npBLACK},
     {npBLACK, npBLACK, npWHITE, npBLACK, npBLACK},
@@ -313,7 +313,7 @@ npLED_t figJ[5][5] = {
 //Figuras de cores
 
 //Quadrado Branco
-npLED_t figWhite[5][5] = {
+const npLED_t figWhite[5][5] = {
     {npWHITE, npWHITE, npWHITE, npWHITE, npWHITE},
     {npWHITE, npWHITE, npWHITE, npWHITE, npWHITE},
     {npWHITE, npWHITE, npWHITE, npWHITE, npWHITE},
@@ -322,7 +322,7 @@ npLED_t figWhite[5][5] = {
 };
 
 //Quadrado Vermelho
-npLED_t figRed[5][5] = {
+const npLED_t figRed[5][5] = {
     {npRED, npRED, npRED, npRED, npRED},
     {npRED, npRED, npRED, npRED, npRED},
     {npRED, npRED, npRED, npRED, npRED},
@@ -331,7 +331,7 @@ npLED_t figRed[5][5] = {
 };
 
 //Quadrado Amarelo
-npLED_t figYellow[5][5] = {
+const npLED_t figYellow[5][5] = {
     {npYELLOW, npYELLOW, npYELLOW, npYELLOW, npYELLOW},
     {npYELLOW, npYELLOW, npYELLOW, npYELLOW, npYELLOW},
     {npYELLOW, npYELLOW, npYELLOW, npYELLOW, npYELLOW},
@@ -340,7 +340,7 @@ npLED_t figYellow[5][5] = {
 };
 
 //Quadrado Verde
-npLED_t figGreen[5][5] = {
+const npLED_t figGreen[5][5] = {
     {npGREEN, npGREEN, npGREEN, npGREEN, npGREEN},
     {npGREEN, npGREEN, npGREEN, npGREEN, npGREEN},
     {npGREEN, npGREEN, npGREEN, npGREEN, npGREEN},
@@ -349,7 +349,7 @@ npLED_t figGreen[5][5] = {
 };
 
 //Quadrado Ciano
-npLED_t figCyan[5][5] = {
+const npLED_t figCyan[5][5] = {
     {npCYAN, npCYAN, npCYAN, npCYAN, npCYAN},
     {npCYAN, npCYAN, npCYAN, npCYAN, npCYAN},
     {npCYAN, npCYAN, npCYAN, npCYAN, npCYAN},
@@ -358,7 +358,7 @@ npLED_t figCyan[5][5] = {
 };
 
 //Quadrado Azul
-npLED_t figBlue[5][5] = {
+const npLED_t figBlue[5][5] = {
     {npBLUE, npBLUE, npBLUE, npBLUE, npBLUE},
     {npBLUE, npBLUE, npBLUE, npBLUE, npBLUE},
     {npBLUE, npBLUE, npBLUE, npBLUE, npBLUE},
@@ -367,7 +367,7 @@ npLED_t figBlue[5][5] = {
 };
 
 //Quadrado Magenta
-npLED_t figMagenta[5][5] = {
+const npLED_t figMagenta[5][5] = {
     {npMAGENTA, npMAGENTA, npMAGENTA, npMAGENTA, npMAGENTA},
     {npMAGENTA, npMAGENTA, npMAGENTA, npMAGENTA, npMAGENTA},
     {npMAGENTA, npMAGENTA, npMAGENTA, npMAGENTA, npMAGENTA},
@@ -379,7 +379,7 @@ npLED_t figMagenta[5][5] = {
 #define colorCOUNT 7
 
 //Array com as cores para facilitar a oscilação entre elas
-npLED_t (*figColors[colorCOUNT])[5][5] = {
+const npLED_t (*figColors[colorCOUNT])[5][5] = {
     &figWhite, &figRed, &figYellow, &figGreen, &figCyan, &figBlue, &figMagenta 
 };
 //Array com o nome das cores
@@ -396,7 +396,7 @@ const char *colorNames[colorCOUNT] = {
 //Essas figuras foram usadas para testar o joystick. Convém mantelas pois podem voltar a ser uteis no futuro
 
 //Circulo (posição central do joystick)
-npLED_t figCircle [5][5] = {
+const npLED_t figCircle [5][5] = {
     {npBLACK, npMAGENTA, npMAGENTA, npMAGENTA, npBLACK},
     {npMAGENTA, npBLACK, npBLACK, npBLACK, npMAGENTA},
     {npMAGENTA, npBLACK, npCYAN, npBLACK, npMAGENTA},
@@ -405,7 +405,7 @@ npLED_t figCircle [5][5] = {
 };
 
 //Seta para cima
-npLED_t figArrowUp[5][5] = {
+const npLED_t figArrowUp[5][5] = {
     {npBLACK, npBLACK, npBLUE, npBLACK, npBLACK},
     {npBLACK, npBLUE, npBLUE, npBLUE, npBLACK},
     {npBLUE, npBLUE, npBLUE, npBLUE, npBLUE},
@@ -414,7 +414,7 @@ npLED_t figArrowUp[5][5] = {
 };
 
 //Seta para baixo
-npLED_t figArrowDown[5][5] = {
+const npLED_t figArrowDown[5][5] = {
     {npBLACK, npBLACK, npYELLOW, npBLACK, npBLACK},
     {npBLACK, npBLACK, npYELLOW, npBLACK, npBLACK},
     {npYELLOW, npYELLOW, npYELLOW, npYELLOW, npYELLOW},
@@ -423,7 +423,7 @@ npLED_t figArrowDown[5][5] = {
 };
 
 //Seta para esquerda
-npLED_t figArrowLeft[5][5] = {
+const npLED_t figArrowLeft[5][5] = {
     {npBLACK, npBLACK, npGREEN, npBLACK, npBLACK},
     {npBLACK,npGREEN, npGREEN, npBLACK, npBLACK},
     {npGREEN, npGREEN, npGREEN, npGREEN, npGREEN},
@@ -431,7 +431,7 @@ npLED_t figArrowLeft[5][5] = {
     {npBLACK, npBLACK, npGREEN, npBLACK, npBLACK}
 };
 
-npLED_t figArrowRight [5][5] = {
+const npLED_t figArrowRight [5][5] = {
     {npBLACK, npBLACK, npRED, npBLACK, npBLACK},
     {npBLACK, npBLACK, npRED, npRED, npBLACK},
     {npRED, npRED, npRED, npRED, npRED},
@@ -440,7 +440,7 @@ npLED_t figArrowRight [5][5] = {
 };
 
 //Array com as setas para facilitar a oscilação entre elas
-npLED_t (*figArrows[5])[5][5] = {
+const npLED_t (*figArrows[5])[5][5] = {
     &figCircle, &figArrowUp, &figArrowDown, &figArrowLeft, &figArrowRight
 };
 
@@ -448,7 +448,7 @@ npLED_t (*figArrows[5])[5][5] = {
 //Inicialmente o contador mostrava o zero mas mesmo com brilho minimo ele ainda atrapalhava
 //na captura da foto. Mas melhor deixar, no futuro seria interessante incluir os numeros de 4 a 9.
 
-npLED_t figZERO[5][5] = {
+const npLED_t figZERO[5][5] = {
     {npBLACK, npWHITE, npWHITE, npWHITE, npBLACK},
     {npWHITE, npBLACK, npBLACK, npBLACK, npWHITE},
     {npWHITE, npBLACK, npBLACK, npBLACK, npWHITE},
@@ -456,7 +456,7 @@ npLED_t figZERO[5][5] = {
     {npBLACK, npWHITE, npWHITE, npWHITE, npBLACK}
 };
 
-npLED_t figONE[5][5] = {
+const npLED_t figONE[5][5] = {
     {npBLACK, npBLACK, npWHITE, npBLACK, npBLACK},
     {npBLACK, npWHITE, npWHITE, npBLACK, npBLACK},
     {npBLACK, npBLACK, npWHITE, npBLACK, npBLACK},
@@ -464,7 +464,7 @@ npLED_t figONE[5][5] = {
     {npBLACK, npWHITE, npWHITE, npWHITE, npBLACK}
 };
 
-npLED_t figTWO[5][5] = {
+const npLED_t figTWO[5][5] = {
     {npBLACK, npWHITE, npWHITE, npWHITE, npBLACK},
     {npBLACK, npBLACK, npBLACK, npBLACK, npWHITE},
     {npBLACK, npBLACK, npWHITE, npWHITE, npBLACK},
@@ -472,7 +472,7 @@ npLED_t figTWO[5][5] = {
     {npBLACK, npWHITE, npWHITE, npWHITE, npWHITE}
 };
 
-npLED_t figTHREE[5][5] = {
+const npLED_t figTHREE[5][5] = {
     {npBLACK, npBLACK, npWHITE, npWHITE, npBLACK},
     {npBLACK, npWHITE, npBLACK, npBLACK, npWHITE},
     {npBLACK, npBLACK, npBLACK, npWHITE, npBLACK},
@@ -481,13 +481,13 @@ npLED_t figTHREE[5][5] = {
 };
 
 //Array com os numeros
-npLED_t (*figNumbers[4])[5][5] = {
+const npLED_t (*figNumbers[4])[5][5] = {
     &figZERO, &figONE, &figTWO, &figTHREE
 };
 
 
 //Arrays para o rastro de luz. A ideia do trail não ficou muito legal não mas é mais conveniente manter
-npLED_t figTrailWhite[5][5] = {
+const npLED_t figTrailWhite[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npWHITE, npBLACK, npBLACK},
@@ -495,7 +495,7 @@ npLED_t figTrailWhite[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK}
 };
 
-npLED_t figTrailRed[5][5] = {
+const npLED_t figTrailRed[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npRED, npBLACK, npBLACK},
@@ -503,7 +503,7 @@ npLED_t figTrailRed[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK}
 };
 
-npLED_t figTrailYellow[5][5] = {
+const npLED_t figTrailYellow[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npYELLOW, npBLACK, npBLACK},
@@ -511,7 +511,7 @@ npLED_t figTrailYellow[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK}
 };
 
-npLED_t figTrailGreen[5][5] = {
+const npLED_t figTrailGreen[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npGREEN, npBLACK, npBLACK},
@@ -519,7 +519,7 @@ npLED_t figTrailGreen[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK}
 };
 
-npLED_t figTrailCyan[5][5] = {
+const npLED_t figTrailCyan[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npCYAN, npBLACK, npBLACK},
@@ -527,7 +527,7 @@ npLED_t figTrailCyan[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK}
 };
 
-npLED_t figTrailBlue[5][5] = {
+const npLED_t figTrailBlue[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npBLUE, npBLACK, npBLACK},
@@ -535,7 +535,7 @@ npLED_t figTrailBlue[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK}
 };
 
-npLED_t figTrailMagenta[5][5] = {
+const npLED_t figTrailMagenta[5][5] = {
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npBLACK, npBLACK, npBLACK},
     {npBLACK, npBLACK, npMAGENTA, npBLACK, npBLACK},
@@ -546,13 +546,13 @@ npLED_t figTrailMagenta[5][5] = {
 //quantidade de cores disponiveis - por hora 8
 #define trailCOUNT 7
 //Array com as cores para facilitar a oscilação entre elas
-npLED_t (*trailColors[trailCOUNT])[5][5] = {
+const npLED_t (*trailColors[trailCOUNT])[5][5] = {
     &figTrailWhite, &figTrailRed, &figTrailYellow, &figTrailGreen, &figTrailCyan, &figTrailBlue, &figTrailMagenta 
 };
 
 //Figuras para as letras do meu nome
 
-npLED_t figP[5][5] = {
+const npLED_t figP[5][5] = {
     {npBLUE, npBLUE, npBLUE, npBLUE, npBLACK},
     {npBLUE, npBLACK, npBLACK, npBLACK, npBLUE},
     {npBLUE, npBLUE, npBLUE, npBLUE, npBLACK},
@@ -560,7 +560,7 @@ npLED_t figP[5][5] = {
     {npBLUE, npBLACK, npBLACK, npBLACK, npBLACK}
 };
 
-npLED_t figE[5][5] = {
+const npLED_t figE[5][5] = {
     {npGREEN, npGREEN, npGREEN, npGREEN, npGREEN},
     {npGREEN, npBLACK, npBLACK, npBLACK, npBLACK},
     {npGREEN, npGREEN, npGREEN, npBLACK, npBLACK},
@@ -568,7 +568,7 @@ npLED_t figE[5][5] = {
     {npGREEN, npGREEN, npGREEN, npGREEN, npGREEN}
 };
 
-npLED_t figD[5][5] = {
+const npLED_t figD[5][5] = {
     {npRED, npRED, npRED, npRED, npBLACK},
     {npRED, npBLACK, npBLACK, npBLACK, npRED},
     {npRED, npBLACK, npBLACK, npBLACK, npRED},
@@ -576,7 +576,7 @@ npLED_t figD[5][5] = {
     {npRED, npRED, npRED, npRED, npBLACK}
 };
 
-npLED_t figR[5][5] = {
+const npLED_t figR[5][5] = {
     {npCYAN, npCYAN, npCYAN, npCYAN, npBLACK},
     {npCYAN, npBLACK, npBLACK, npBLACK, npCYAN},
     {npCYAN, npCYAN, npCYAN, npCYAN, npBLACK},
@@ -584,7 +584,7 @@ npLED_t figR[5][5] = {
     {npCYAN, npBLACK, npBLACK, npBLACK, npCYAN}
 };
 
-npLED_t figO[5][5] = {
+const npLED_t figO[5][5] = {
     {npBLACK, npMAGENTA, npMAGENTA, npMAGENTA, npBLACK},
     {npMAGENTA, npBLACK, npBLACK, npBLACK, npMAGENTA},
     {npMAGENTA, npBLACK, npBLACK, npBLACK, npMAGENTA},
@@ -594,7 +594,7 @@ npLED_t figO[5][5] = {
 
 #define letterCOUNT 5
 //Array com as letras do meu nome =)
-npLED_t (*arrayPedro[letterCOUNT])[5][5] = {
+const npLED_t (*arrayPedro[letterCOUNT])[5][5] = {
     &figP, &figE, &figD, &figR, &figO 
 };
 

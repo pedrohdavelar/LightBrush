@@ -123,6 +123,7 @@
         "stdlib.h": "c",
         "i2c.h": "c",
         "dma.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "pwm.h": "c"
     }
 }
